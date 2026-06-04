@@ -28,6 +28,23 @@ const startTime = Date.now();
 const WHATSAPP_GROUP = "https://chat.whatsapp.com/GhR2hEVykLw73COlrSNLzw";
 const WHATSAPP_CHANNEL = "https://whatsapp.com/channel/0029VbDGZnkJf05bl3rDHR2y";
 
+// Bot Avatar ASCII Art
+const BOT_AVATAR = `
+╔══════════════════════════════╗
+║      🤖 SIMON TECH BOT       ║
+║         v2.0.0 ELITE         ║
+║                              ║
+║    ╔════════════════════╗    ║
+║    ║ 👁️  👓  🎭  👁️  ║    ║
+║    ║  ANIME STYLE      ║    ║
+║    ║  BOT ASSISTANT    ║    ║
+║    ║    ❌ CHAIN ❌     ║    ║
+║    ╚════════════════════╝    ║
+║                              ║
+║   Powered by Simon Tech ✨   ║
+╚══════════════════════════════╝
+`;
+
 // =====================
 // SYSTEM COMMANDS
 // =====================
@@ -38,17 +55,24 @@ bot.onText(/\/start|\.start/, (msg) => {
   
   bot.sendMessage(
     chatId,
-    `╭━━〔 🤖 SIMON TECH BOT 〕━━⬣
+    `${BOT_AVATAR}
+
+╭━━〔 🤖 SIMON TECH BOT 〕━━⬣
 │
 │ 👋 Welcome ${firstName}!
 │ 
-│ A powerful Telegram bot for 
+│ ✨ A powerful Telegram bot for 
 │ WhatsApp control & automation
+│
+│ 👁️ 👓 Anime Styled • Elite Status
 │
 │ Use .menu to view all commands
 │
-│ 📱 WhatsApp Group: ${WHATSAPP_GROUP}
-│ 📢 WhatsApp Channel: ${WHATSAPP_CHANNEL}
+│ 📱 WhatsApp Group:
+│    ${WHATSAPP_GROUP}
+│
+│ 📢 WhatsApp Channel:
+│    ${WHATSAPP_CHANNEL}
 │
 ╰━━━━━━━━━━━━━━━━━⬣`,
     {
@@ -57,7 +81,7 @@ bot.onText(/\/start|\.start/, (msg) => {
         keyboard: [
           [{ text: ".menu" }, { text: ".help" }],
           [{ text: ".ping" }, { text: ".status" }],
-          [{ text: ".whatsapp" }]
+          [{ text: ".whatsapp" }, { text: ".avatar" }]
         ],
         resize_keyboard: true,
         one_time_keyboard: false
@@ -66,9 +90,16 @@ bot.onText(/\/start|\.start/, (msg) => {
   );
 });
 
+bot.onText(/\.avatar|\/avatar/, (msg) => {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, BOT_AVATAR);
+});
+
 bot.onText(/\.menu|\/menu/, (msg) => {
   const chatId = msg.chat.id;
-  const menuText = `╭━━〔 🤖 SIMON TECH BOT MENU 〕━━⬣
+  const menuText = `${BOT_AVATAR}
+
+╭━━〔 🤖 SIMON TECH BOT MENU 〕━━⬣
 │
 ├⊷ 👑 OWNER
 │  ├ .owner - Bot owner info
@@ -83,8 +114,7 @@ bot.onText(/\.menu|\/menu/, (msg) => {
 │  ├ .alive - Bot alive status
 │  ├ .status - Bot status
 │  ├ .uptime - Bot uptime
-│  ├ .info - Bot information
-│  ├ .restart - Restart bot
+│  ├ .avatar - Show bot avatar
 │  ├ .version - Bot version
 │  ├ .about - About bot
 │  ├ .whatsapp - WhatsApp links
@@ -165,11 +195,11 @@ Type a command to continue...`;
 bot.onText(/\.ping|\/ping/, (msg) => {
   const chatId = msg.chat.id;
   const responseTime = Date.now();
-  bot.sendMessage(chatId, "🏓 Pong! Bot is responding...", {
+  bot.sendMessage(chatId, `${BOT_AVATAR}\n\n🏓 Pong! Bot is responding...`, {
     parse_mode: "HTML"
   }).then(() => {
     const ping = Date.now() - responseTime;
-    bot.editMessageText(`🏓 Pong!\n⚡ Response time: ${ping}ms`, {
+    bot.editMessageText(`${BOT_AVATAR}\n\n🏓 Pong!\n⚡ Response time: ${ping}ms`, {
       chat_id: chatId,
       message_id: msg.message_id
     }).catch(() => {});
@@ -181,7 +211,9 @@ bot.onText(/\.status|\/status/, (msg) => {
   const uptime = Math.floor((Date.now() - startTime) / 1000);
   const memoryUsage = Math.round(process.memoryUsage().heapUsed / 1024 / 1024);
   
-  const statusText = `╭━━〔 🤖 BOT STATUS 〕━━⬣
+  const statusText = `${BOT_AVATAR}
+
+╭━━〔 🤖 BOT STATUS 〕━━⬣
 │
 ├ 🟢 Status: ONLINE ✅
 ├ ⏱ Uptime: ${uptime}s
@@ -190,7 +222,8 @@ bot.onText(/\.status|\/status/, (msg) => {
 ├ 📡 Connection: ACTIVE
 ├ 🌐 WhatsApp: READY
 ├ 📱 Device: Multi-Device
-├ 📦 Version: 2.0.0 (UPGRADED)
+├ 📦 Version: 2.0.0 ELITE
+├ 👁️ Avatar: ANIME STYLE
 │
 ╰━━━━━━━━━━━━⬣`;
 
@@ -201,7 +234,9 @@ bot.onText(/\.status|\/status/, (msg) => {
 
 bot.onText(/\.whatsapp|\/whatsapp/, (msg) => {
   const chatId = msg.chat.id;
-  const whatsappText = `╭━━〔 📱 WHATSAPP LINKS 〕━━⬣
+  const whatsappText = `${BOT_AVATAR}
+
+╭━━〔 📱 WHATSAPP LINKS 〕━━⬣
 │
 ├ 👥 WhatsApp Group:
 │  ${WHATSAPP_GROUP}
@@ -221,9 +256,13 @@ bot.onText(/\.whatsapp|\/whatsapp/, (msg) => {
 
 bot.onText(/\.help|\/help/, (msg) => {
   const chatId = msg.chat.id;
-  const helpText = `╭━━〔 HELP 〕━━⬣
+  const helpText = `${BOT_AVATAR}
+
+╭━━〔 HELP 〕━━⬣
 │
-│ SIMON TECH BOT v2.0.0
+│ SIMON TECH BOT v2.0.0 ELITE
+│ 👁️ 👓 Anime Styled Bot
+│ 
 │ Powerful Telegram bot for 
 │ WhatsApp control & automation
 │
@@ -233,6 +272,7 @@ bot.onText(/\.help|\/help/, (msg) => {
 │ 2️⃣ Use dot (.) before commands
 │ 3️⃣ Example: .ping
 │ 4️⃣ For help: .help or /help
+│ 5️⃣ View avatar: .avatar
 │
 │ 🔗 Links:
 │ GitHub: github.com/creatorj-st
@@ -250,7 +290,9 @@ bot.onText(/\.help|\/help/, (msg) => {
 
 bot.onText(/\.owner|\/owner/, (msg) => {
   const chatId = msg.chat.id;
-  const ownerText = `╭━━〔 👑 OWNER INFO 〕━━⬣
+  const ownerText = `${BOT_AVATAR}
+
+╭━━〔 👑 OWNER INFO 〕━━⬣
 │
 ├ 👨‍💻 Name: Simon Tech
 ├ 📱 WhatsApp: 09166265317
@@ -273,9 +315,12 @@ bot.onText(/\.owner|\/owner/, (msg) => {
 
 bot.onText(/\.credits|\/credits/, (msg) => {
   const chatId = msg.chat.id;
-  const creditsText = `╭━━〔 🙏 CREDITS & SUPPORT 〕━━⬣
+  const creditsText = `${BOT_AVATAR}
+
+╭━━〔 🙏 CREDITS & SUPPORT 〕━━⬣
 │
-│ SIMON TECH BOT v2.0.0
+│ SIMON TECH BOT v2.0.0 ELITE
+│ 👁️ 👓 Anime Styled
 │
 ├ 👨‍💼 Developer: Simon Tech
 ├ 📱 Contact: 09166265317
@@ -292,7 +337,8 @@ bot.onText(/\.credits|\/credits/, (msg) => {
 │
 ├ 📜 License: MIT (Open Source)
 ├ 🚀 Status: Active Development
-├ 📦 Version: 2.0.0 (Upgraded)
+├ 📦 Version: 2.0.0 ELITE
+├ 👁️ Style: ANIME AESTHETIC
 │
 ╰━━━━━━━━━━━━━━━━⬣`;
 
@@ -312,7 +358,7 @@ bot.onText(/\.uptime|\/uptime/, (msg) => {
 
   bot.sendMessage(
     chatId,
-    `⏱️ Bot Uptime:\n\n${days}d ${hours}h ${minutes}m ${seconds}s`,
+    `${BOT_AVATAR}\n\n⏱️ Bot Uptime:\n\n${days}d ${hours}h ${minutes}m ${seconds}s`,
     {
       parse_mode: "HTML"
     }
@@ -323,7 +369,7 @@ bot.onText(/\.alive|\/alive/, (msg) => {
   const chatId = msg.chat.id;
   bot.sendMessage(
     chatId,
-    `✅ Yes, I'm alive!\n\n🤖 SIMON TECH BOT v2.0.0 is running smoothly.\n\nUse .menu for commands.`,
+    `${BOT_AVATAR}\n\n✅ Yes, I'm alive!\n\n🤖 SIMON TECH BOT v2.0.0 ELITE is running smoothly.\n\n👁️ Anime Style • Ready to Serve\n\nUse .menu for commands.`,
     {
       parse_mode: "HTML"
     }
@@ -334,7 +380,7 @@ bot.onText(/\.version|\/version/, (msg) => {
   const chatId = msg.chat.id;
   bot.sendMessage(
     chatId,
-    `📦 Bot Version: 2.0.0 (UPGRADED)\n⚙️ Node.js: ${process.version}\n📅 Last Update: ${new Date().toDateString()}\n✨ New: WhatsApp links & enhanced commands`,
+    `${BOT_AVATAR}\n\n📦 Bot Version: 2.0.0 ELITE (UPGRADED)\n⚙️ Node.js: ${process.version}\n📅 Last Update: ${new Date().toDateString()}\n✨ New: Anime Avatar, WhatsApp links & enhanced commands\n👁️ Style: Anime Aesthetic`,
     {
       parse_mode: "HTML"
     }
@@ -343,9 +389,12 @@ bot.onText(/\.version|\/version/, (msg) => {
 
 bot.onText(/\.about|\/about/, (msg) => {
   const chatId = msg.chat.id;
-  const aboutText = `╭━━〔 ABOUT 〕━━⬣
+  const aboutText = `${BOT_AVATAR}
+
+╭━━〔 ABOUT 〕━━⬣
 │
-│ SIMON TECH BOT v2.0.0
+│ SIMON TECH BOT v2.0.0 ELITE
+│ 👁️ 👓 Anime Styled Bot
 │
 │ 🤖 Features:
 │  • Telegram Integration ✅
@@ -357,11 +406,13 @@ bot.onText(/\.about|\/about/, (msg) => {
 │  • AI Integration ✅
 │  • Media Processing ✅
 │  • WhatsApp Links ✅ NEW
+│  • Anime Avatar ✅ NEW
 │
 │ 🚀 Powered by:
 │  • Node.js
 │  • Telegram Bot API
 │  • Express.js
+│  • Anime Aesthetics ✨
 │
 │ 📜 License: MIT (Open Source)
 │ 👨‍💻 Developer: Simon Tech
@@ -379,9 +430,9 @@ bot.on("message", (msg) => {
     return; // Ignore regular messages
   }
   
-  if (msg.text && msg.text.startsWith(".") && !msg.text.match(/^\.(menu|ping|status|help|owner|uptime|alive|version|about|whatsapp|credits|start)/)) {
+  if (msg.text && msg.text.startsWith(".") && !msg.text.match(/^\.(menu|ping|status|help|owner|uptime|alive|version|about|whatsapp|credits|avatar|start)/)) {
     const chatId = msg.chat.id;
-    bot.sendMessage(chatId, "❓ Unknown command. Type .menu for all available commands.");
+    bot.sendMessage(chatId, `${BOT_AVATAR}\n\n❓ Unknown command. Type .menu for all available commands.`);
   }
 });
 
@@ -411,6 +462,7 @@ app.get("/", (req, res) => {
     status: "online",
     bot: "SIMON TECH BOT",
     version: "2.0.0",
+    style: "ANIME ELITE",
     uptime: Math.floor((Date.now() - startTime) / 1000),
     whatsappGroup: WHATSAPP_GROUP,
     whatsappChannel: WHATSAPP_CHANNEL
@@ -421,7 +473,8 @@ app.get("/health", (req, res) => {
   res.json({
     status: "healthy",
     timestamp: new Date().toISOString(),
-    version: "2.0.0"
+    version: "2.0.0",
+    style: "ANIME"
   });
 });
 
@@ -430,13 +483,16 @@ app.get("/status", (req, res) => {
     status: "online",
     uptime: Math.floor((Date.now() - startTime) / 1000),
     memory: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
-    version: "2.0.0"
+    version: "2.0.0",
+    avatar: "ANIME STYLE"
   });
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ SIMON TECH BOT v2.0.0 is running on port ${PORT}`);
+  console.log(`${BOT_AVATAR}`);
+  console.log(`✅ SIMON TECH BOT v2.0.0 ELITE is running on port ${PORT}`);
   console.log(`🤖 Bot Status: Online`);
+  console.log(`👁️ Avatar Style: ANIME AESTHETIC`);
   console.log(`📊 Started at: ${new Date().toISOString()}`);
   console.log(`📱 WhatsApp Group: ${WHATSAPP_GROUP}`);
   console.log(`📢 WhatsApp Channel: ${WHATSAPP_CHANNEL}`);
