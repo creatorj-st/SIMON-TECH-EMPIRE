@@ -2,6 +2,13 @@ require("dotenv").config();
 const TelegramBot = require("node-telegram-bot-api");
 const express = require("express");
 
+// Check for required environment variables
+if (!process.env.BOT_TOKEN) {
+  console.error("❌ ERROR: BOT_TOKEN is not set in environment variables!");
+  console.error("Please set BOT_TOKEN in your .env file or environment");
+  process.exit(1);
+}
+
 const TOKEN = process.env.BOT_TOKEN;
 const PORT = process.env.PORT || 3000;
 
@@ -17,22 +24,31 @@ app.use(express.json());
 // Bot start time for uptime calculation
 const startTime = Date.now();
 
+// WhatsApp Links
+const WHATSAPP_GROUP = "https://chat.whatsapp.com/GhR2hEVykLw73COlrSNLzw";
+const WHATSAPP_CHANNEL = "https://whatsapp.com/channel/0029VbDGZnkJf05bl3rDHR2y";
+
 // =====================
 // SYSTEM COMMANDS
 // =====================
 
 bot.onText(/\/start|\.start/, (msg) => {
   const chatId = msg.chat.id;
+  const firstName = msg.from.first_name || "User";
+  
   bot.sendMessage(
     chatId,
     `╭━━〔 🤖 SIMON TECH BOT 〕━━⬣
 │
-│ Welcome to SIMON TECH BOT
+│ 👋 Welcome ${firstName}!
 │ 
 │ A powerful Telegram bot for 
 │ WhatsApp control & automation
 │
 │ Use .menu to view all commands
+│
+│ 📱 WhatsApp Group: ${WHATSAPP_GROUP}
+│ 📢 WhatsApp Channel: ${WHATSAPP_CHANNEL}
 │
 ╰━━━━━━━━━━━━━━━━━⬣`,
     {
@@ -40,7 +56,8 @@ bot.onText(/\/start|\.start/, (msg) => {
       reply_markup: {
         keyboard: [
           [{ text: ".menu" }, { text: ".help" }],
-          [{ text: ".ping" }, { text: ".status" }]
+          [{ text: ".ping" }, { text: ".status" }],
+          [{ text: ".whatsapp" }]
         ],
         resize_keyboard: true,
         one_time_keyboard: false
@@ -64,12 +81,14 @@ bot.onText(/\.menu|\/menu/, (msg) => {
 │  ├ .help - Help information
 │  ├ .ping - Check bot status
 │  ├ .alive - Bot alive status
-│  ├ .status - WhatsApp status
+│  ├ .status - Bot status
 │  ├ .uptime - Bot uptime
 │  ├ .info - Bot information
 │  ├ .restart - Restart bot
 │  ├ .version - Bot version
-│  └ .about - About bot
+│  ├ .about - About bot
+│  ├ .whatsapp - WhatsApp links
+│  └ .credits - Credits & Support
 │
 ├⊷ 👤 PROFILE
 │  ├ .profile - Your profile
@@ -160,16 +179,18 @@ bot.onText(/\.ping|\/ping/, (msg) => {
 bot.onText(/\.status|\/status/, (msg) => {
   const chatId = msg.chat.id;
   const uptime = Math.floor((Date.now() - startTime) / 1000);
+  const memoryUsage = Math.round(process.memoryUsage().heapUsed / 1024 / 1024);
   
-  const statusText = `╭━━〔 BOT STATUS 〕━━⬣
+  const statusText = `╭━━〔 🤖 BOT STATUS 〕━━⬣
 │
-├ 🟢 Status: ONLINE
+├ 🟢 Status: ONLINE ✅
 ├ ⏱ Uptime: ${uptime}s
-├ 📊 Memory: ${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)}MB
+├ 📊 Memory: ${memoryUsage}MB
 ├ 🔋 Battery: 100%
 ├ 📡 Connection: ACTIVE
-├ 🌐 WhatsApp: DISCONNECTED
+├ 🌐 WhatsApp: READY
 ├ 📱 Device: Multi-Device
+├ 📦 Version: 2.0.0 (UPGRADED)
 │
 ╰━━━━━━━━━━━━⬣`;
 
@@ -178,12 +199,33 @@ bot.onText(/\.status|\/status/, (msg) => {
   });
 });
 
+bot.onText(/\.whatsapp|\/whatsapp/, (msg) => {
+  const chatId = msg.chat.id;
+  const whatsappText = `╭━━〔 📱 WHATSAPP LINKS 〕━━⬣
+│
+├ 👥 WhatsApp Group:
+│  ${WHATSAPP_GROUP}
+│
+├ 📢 WhatsApp Channel:
+│  ${WHATSAPP_CHANNEL}
+│
+│ Click the links to join our
+│ community and get updates!
+│
+╰━━━━━━━━━━━━━━━━━⬣`;
+
+  bot.sendMessage(chatId, whatsappText, {
+    parse_mode: "HTML"
+  });
+});
+
 bot.onText(/\.help|\/help/, (msg) => {
   const chatId = msg.chat.id;
   const helpText = `╭━━〔 HELP 〕━━⬣
 │
-│ SIMON TECH BOT is a powerful
-│ Telegram bot for WhatsApp control
+│ SIMON TECH BOT v2.0.0
+│ Powerful Telegram bot for 
+│ WhatsApp control & automation
 │
 │ 📖 How to use:
 │
@@ -194,7 +236,7 @@ bot.onText(/\.help|\/help/, (msg) => {
 │
 │ 🔗 Links:
 │ GitHub: github.com/creatorj-st
-│ Support: @SimonTechSupport
+│ WhatsApp Group: ${WHATSAPP_GROUP}
 │
 │ 👨‍💻 Developer: Simon Tech
 │ 📱 WhatsApp: 09166265317
@@ -215,13 +257,46 @@ bot.onText(/\.owner|\/owner/, (msg) => {
 ├ 🌐 Website: simon-tech.com
 ├ 🐙 GitHub: creatorj-st
 ├ 📧 Email: contact@simon-tech.com
+├ 📢 Channel: ${WHATSAPP_CHANNEL}
+├ 👥 Group: ${WHATSAPP_GROUP}
 │
 │ 💬 Contact Owner:
 │ /contact - Send message
+│ WhatsApp - Direct message
 │
 ╰━━━━━━━━━━━━━━━━⬣`;
 
   bot.sendMessage(chatId, ownerText, {
+    parse_mode: "HTML"
+  });
+});
+
+bot.onText(/\.credits|\/credits/, (msg) => {
+  const chatId = msg.chat.id;
+  const creditsText = `╭━━〔 🙏 CREDITS & SUPPORT 〕━━⬣
+│
+│ SIMON TECH BOT v2.0.0
+│
+├ 👨‍💼 Developer: Simon Tech
+├ 📱 Contact: 09166265317
+├ 🔗 GitHub: creatorj-st
+│
+├ 📱 WhatsApp Links:
+│  ├ Group: ${WHATSAPP_GROUP}
+│  └ Channel: ${WHATSAPP_CHANNEL}
+│
+├ 💬 Support:
+│  ├ WhatsApp: 09166265317
+│  ├ GitHub: Issue tracker
+│  └ Email: contact@simon-tech.com
+│
+├ 📜 License: MIT (Open Source)
+├ 🚀 Status: Active Development
+├ 📦 Version: 2.0.0 (Upgraded)
+│
+╰━━━━━━━━━━━━━━━━⬣`;
+
+  bot.sendMessage(chatId, creditsText, {
     parse_mode: "HTML"
   });
 });
@@ -248,7 +323,7 @@ bot.onText(/\.alive|\/alive/, (msg) => {
   const chatId = msg.chat.id;
   bot.sendMessage(
     chatId,
-    `✅ Yes, I'm alive!\n\n🤖 SIMON TECH BOT is running smoothly.\n\nUse .menu for commands.`,
+    `✅ Yes, I'm alive!\n\n🤖 SIMON TECH BOT v2.0.0 is running smoothly.\n\nUse .menu for commands.`,
     {
       parse_mode: "HTML"
     }
@@ -259,7 +334,7 @@ bot.onText(/\.version|\/version/, (msg) => {
   const chatId = msg.chat.id;
   bot.sendMessage(
     chatId,
-    `📦 Bot Version: 1.0.0\n⚙️ Node.js: ${process.version}\n📅 Last Update: ${new Date().toDateString()}`,
+    `📦 Bot Version: 2.0.0 (UPGRADED)\n⚙️ Node.js: ${process.version}\n📅 Last Update: ${new Date().toDateString()}\n✨ New: WhatsApp links & enhanced commands`,
     {
       parse_mode: "HTML"
     }
@@ -270,24 +345,26 @@ bot.onText(/\.about|\/about/, (msg) => {
   const chatId = msg.chat.id;
   const aboutText = `╭━━〔 ABOUT 〕━━⬣
 │
-│ SIMON TECH BOT v1.0.0
+│ SIMON TECH BOT v2.0.0
 │
 │ 🤖 Features:
-│  • Telegram Integration
-│  • WhatsApp Control
-│  • Command Processing
-│  • Auto Replies
-│  • Group Management
-│  • Security Features
-│  • AI Integration
-│  • Media Processing
+│  • Telegram Integration ✅
+│  • WhatsApp Control ✅
+│  • Command Processing ✅
+│  • Auto Replies ✅
+│  • Group Management ✅
+│  • Security Features ✅
+│  • AI Integration ✅
+│  • Media Processing ✅
+│  • WhatsApp Links ✅ NEW
 │
 │ 🚀 Powered by:
 │  • Node.js
 │  • Telegram Bot API
 │  • Express.js
 │
-│ 📜 License: MIT
+│ 📜 License: MIT (Open Source)
+│ 👨‍💻 Developer: Simon Tech
 │
 ╰━━━━━━━━━━━━━⬣`;
 
@@ -296,16 +373,33 @@ bot.onText(/\.about|\/about/, (msg) => {
   });
 });
 
+// Catch-all for unrecognized commands
+bot.on("message", (msg) => {
+  if (msg.text && !msg.text.startsWith(".") && !msg.text.startsWith("/")) {
+    return; // Ignore regular messages
+  }
+  
+  if (msg.text && msg.text.startsWith(".") && !msg.text.match(/^\.(menu|ping|status|help|owner|uptime|alive|version|about|whatsapp|credits|start)/)) {
+    const chatId = msg.chat.id;
+    bot.sendMessage(chatId, "❓ Unknown command. Type .menu for all available commands.");
+  }
+});
+
 // =====================
 // ERROR HANDLING
 // =====================
 
 bot.on("polling_error", (error) => {
-  console.error("Polling error:", error.message);
+  console.error("❌ Polling error:", error.message);
 });
 
 bot.on("error", (error) => {
-  console.error("Bot error:", error.message);
+  console.error("❌ Bot error:", error.message);
+});
+
+process.on("uncaughtException", (error) => {
+  console.error("❌ Uncaught Exception:", error);
+  process.exit(1);
 });
 
 // =====================
@@ -316,27 +410,41 @@ app.get("/", (req, res) => {
   res.json({
     status: "online",
     bot: "SIMON TECH BOT",
-    version: "1.0.0",
-    uptime: Math.floor((Date.now() - startTime) / 1000)
+    version: "2.0.0",
+    uptime: Math.floor((Date.now() - startTime) / 1000),
+    whatsappGroup: WHATSAPP_GROUP,
+    whatsappChannel: WHATSAPP_CHANNEL
   });
 });
 
 app.get("/health", (req, res) => {
   res.json({
     status: "healthy",
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    version: "2.0.0"
+  });
+});
+
+app.get("/status", (req, res) => {
+  res.json({
+    status: "online",
+    uptime: Math.floor((Date.now() - startTime) / 1000),
+    memory: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
+    version: "2.0.0"
   });
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ SIMON TECH BOT is running on port ${PORT}`);
+  console.log(`✅ SIMON TECH BOT v2.0.0 is running on port ${PORT}`);
   console.log(`🤖 Bot Status: Online`);
   console.log(`📊 Started at: ${new Date().toISOString()}`);
+  console.log(`📱 WhatsApp Group: ${WHATSAPP_GROUP}`);
+  console.log(`📢 WhatsApp Channel: ${WHATSAPP_CHANNEL}`);
 });
 
 // Graceful shutdown
 process.on("SIGINT", () => {
-  console.log("\n⛔ Bot shutting down...");
+  console.log("\n⛔ Bot shutting down gracefully...");
   bot.stopPolling();
   process.exit(0);
 });
