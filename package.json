@@ -1,31 +1,53 @@
 {
   "name": "simon-tech-bot",
-  "version": "1.0.0",
-  "description": "SIMON TECH BOT - Powerful Telegram bot for WhatsApp control",
+  "version": "3.0.0",
+  "description": "SIMON TECH BOT - Most Powerful SaaS Telegram Bot for WhatsApp Control & Automation",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "build": "npm install",
+    "test": "echo \"Testing bot...\"",
+    "deploy": "git push"
   },
   "keywords": [
     "telegram",
     "bot",
     "whatsapp",
-    "automation"
+    "automation",
+    "saas",
+    "anime",
+    "elite",
+    "powerful"
   ],
   "author": "Simon Tech",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/creatorj-st/SIMON-TECH-EMPIRE.git"
+  },
+  "homepage": "https://github.com/creatorj-st/SIMON-TECH-EMPIRE",
+  "bugs": {
+    "url": "https://github.com/creatorj-st/SIMON-TECH-EMPIRE/issues"
+  },
   "dependencies": {
     "node-telegram-bot-api": "^0.63.0",
     "dotenv": "^16.3.1",
     "axios": "^1.6.2",
     "qrcode": "^1.5.3",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "body-parser": "^1.20.2"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
   },
   "engines": {
-    "node": ">=14.0.0"
-  }
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "preferGlobal": false,
+  "private": false
 }
