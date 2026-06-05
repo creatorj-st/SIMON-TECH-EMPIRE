@@ -1,6 +1,6 @@
 {
   "name": "simon-tech-bot",
-  "version": "9.0.0",
+  "version": "10.0.0",
   "description": "SIMON TECH BOT - Most Powerful SaaS Telegram Bot for WhatsApp Control & Automation",
   "main": "index.js",
   "scripts": {
@@ -39,7 +39,9 @@
     "cors": "^2.8.5",
     "helmet": "^7.1.0",
     "morgan": "^1.10.0",
-    "body-parser": "^1.20.2"
+    "body-parser": "^1.20.2",
+    "whatsapp-web.js": "^1.25.0",
+    "puppeteer": "^21.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
