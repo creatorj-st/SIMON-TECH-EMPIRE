@@ -1,6 +1,6 @@
 {
   "name": "simon-tech-bot",
-  "version": "3.0.0",
+  "version": "9.0.0",
   "description": "SIMON TECH BOT - Most Powerful SaaS Telegram Bot for WhatsApp Control & Automation",
   "main": "index.js",
   "scripts": {
